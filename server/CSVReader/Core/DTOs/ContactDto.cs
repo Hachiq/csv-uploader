@@ -2,8 +2,8 @@
 
 public record ContactDto(
     string Name,
-    DateTime DateOfBirth,
-    bool Married,
+    DateOnly DateOfBirth,
+    bool IsMarried,
     string Phone,
     decimal Salary
 );
