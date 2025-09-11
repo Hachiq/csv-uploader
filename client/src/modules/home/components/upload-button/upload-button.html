@@ -1,1 +1,9 @@
-<input type="file" (change)="onFileSelected($event)">
+<div class="upload-container">
+  <input type="file" accept=".csv" (change)="onFileSelected($event)" />
+
+  <button 
+    (click)="onUpload()" 
+    [disabled]="!selectedFile">
+    Upload
+  </button>
+</div>
