@@ -28,4 +28,8 @@ export class Home {
   onFileUploaded(file: File) {
     this.contactService.upload(file).subscribe(() => this.getContacts());
   }
+
+  deleteContact(id: string) {
+    this.contactService.delete(id).subscribe(() => this.getContacts());
+  }
 }

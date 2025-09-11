@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  // color
+  --primary: #0d1b2a;
+  --secondary: #1b263b;
+  --tertiary: #415a77;
+  --quaternary: #778da9;
+  --quinary: #e0e1dd;
+
+  --danger: #e63946;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  background-color: var(--quinary);
+}

@@ -1,21 +1,27 @@
-<table class="table-auto border-collapse border border-gray-400 w-full">
+<table>
   <thead>
-    <tr class="bg-gray-200">
-      <th class="border border-gray-400 px-4 py-2">Name</th>
-      <th class="border border-gray-400 px-4 py-2">Date of Birth</th>
-      <th class="border border-gray-400 px-4 py-2">Married</th>
-      <th class="border border-gray-400 px-4 py-2">Phone</th>
-      <th class="border border-gray-400 px-4 py-2">Salary</th>
+    <tr>
+      <th>Name</th>
+      <th>Date of Birth</th>
+      <th>Married</th>
+      <th>Phone</th>
+      <th>Salary</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let contact of contacts">
-      <td class="border border-gray-400 px-4 py-2">{{ contact.name }}</td>
-      <td class="border border-gray-400 px-4 py-2">{{ contact.dateOfBirth | date }}</td>
-      <td class="border border-gray-400 px-4 py-2">{{ contact.isMarried ? 'Yes' : 'No' }}</td>
-      <td class="border border-gray-400 px-4 py-2">{{ contact.phone }}</td>
-      <td class="border border-gray-400 px-4 py-2">{{ contact.salary | currency }}</td>
-    </tr>
+    @for (contact of contacts; track $index) {
+      <tr>
+        <td>{{ contact.name }}</td>
+        <td>{{ contact.dateOfBirth | date }}</td>
+        <td>{{ contact.isMarried ? 'Yes' : 'No' }}</td>
+        <td>{{ contact.phone }}</td>
+        <td>{{ contact.salary | currency }}</td>
+        <td>
+          <button (click)="deleteContact(contact.id)">Delete</button>
+        </td>
+      </tr>
+    }
   </tbody>
 </table>
 
