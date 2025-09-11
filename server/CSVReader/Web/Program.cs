@@ -1,6 +1,7 @@
 using Core.ExceptionHandling;
 using Data;
 using Services;
+using Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDataServices(builder.Configuration);
 builder.Services.AddApplicationServices();
-
-// TODO: Add DI class for web layer
-builder.Services.AddControllers();
+builder.Services.AddPresentationServices();
 
 var app = builder.Build();
 
@@ -19,6 +18,8 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors("NgOrigins");
 
 app.UseAuthorization();
 
