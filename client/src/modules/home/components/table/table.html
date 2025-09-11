@@ -1,16 +1,16 @@
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Date of Birth</th>
-      <th>Married</th>
-      <th>Phone</th>
-      <th>Salary</th>
+      <th title="Sort by name" (click)="sortBy('name')">Name</th>
+      <th title="Sort by date of birth" (click)="sortBy('dateOfBirth')">Date of Birth</th>
+      <th title="Sort by marital status" (click)="sortBy('isMarried')">Married</th>
+      <th title="Sort by phone" (click)="sortBy('phone')">Phone</th>
+      <th title="Sort by salary" (click)="sortBy('salary')">Salary</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-    @for (contact of contacts; track $index) {
+    @for (contact of sortedContacts; track $index) {
       <tr>
         <td>{{ contact.name }}</td>
         <td>{{ contact.dateOfBirth | date }}</td>
@@ -26,9 +26,9 @@
 </table>
 
 @if (!contacts || contacts.length === 0) {
-    <div class="text-center text-gray-500 mt-4">
-        No contacts available
-    </div>
+  <div class="empty-table">
+      No contacts available
+  </div>
 }
 
 
