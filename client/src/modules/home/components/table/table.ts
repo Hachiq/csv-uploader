@@ -1,24 +1,30 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../../../../core/interfaces/contact';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-table',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './table.html',
   styleUrl: './table.scss'
 })
 export class Table {
   @Input() contacts: Contact[] = [];
-  sortedContacts: Contact[] = [];
+  displayedContacts: Contact[] = [];
 
-  sortColumn: keyof Contact | '' = '';
+  searchTerm: string = '';
+  sortColumn?: keyof Contact;
   sortDirection: 'asc' | 'desc' = 'asc';
 
   @Output() onContactDelete = new EventEmitter<string>();
 
   ngOnChanges() {
-    this.sortedContacts = [...this.contacts];
+    this.applyFiltersAndSorting();
+  }
+
+  onSearchChange() {
+    this.applyFiltersAndSorting();
   }
 
   deleteContact(id: string) {
@@ -26,30 +32,49 @@ export class Table {
   }
 
   sortBy(column: keyof Contact) {
-    console.log(`Sorting by ${column}`);
     if (this.sortColumn === column) {
-      // toggle direction
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
 
-    this.sortedContacts.sort((a, b) => {
-      const valueA = a[column];
-      const valueB = b[column];
+    this.applyFiltersAndSorting();
+  }
 
-      if (valueA == null || valueB == null) return 0;
+  private applyFiltersAndSorting() {
+    let result = [...this.contacts];
 
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
+    if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
+      result = result.filter(contact =>
+        contact.name.toLowerCase().includes(term) ||
+        contact.phone.toLowerCase().includes(term) ||
+        contact.salary.toString().includes(term) ||
+        (contact.isMarried ? 'yes' : 'no').includes(term)
+      );
+    }
+
+    if (this.sortColumn) {
+      const column = this.sortColumn;
+      result.sort((a, b) => {
+        const valueA = a[column] as any;
+        const valueB = b[column] as any;
+
+        if (valueA == null || valueB == null) return 0;
+
+        if (typeof valueA === 'string' && typeof valueB === 'string') {
+          return this.sortDirection === 'asc'
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
+        }
+
         return this.sortDirection === 'asc'
-          ? valueA.localeCompare(valueB)
-          : valueB.localeCompare(valueA);
-      }
+          ? valueA > valueB ? 1 : -1
+          : valueA < valueB ? 1 : -1;
+      });
+    }
 
-      return this.sortDirection === 'asc'
-        ? (valueA as any) > (valueB as any) ? 1 : -1
-        : (valueA as any) < (valueB as any) ? 1 : -1;
-    });
+    this.displayedContacts = result;
   }
 }

@@ -1,3 +1,12 @@
+<div class="table-controls">
+  <input
+    type="text"
+    placeholder="Search contacts..."
+    [(ngModel)]="searchTerm"
+    (input)="onSearchChange()"
+  />
+</div>
+
 <table>
   <thead>
     <tr>
@@ -10,7 +19,7 @@
     </tr>
   </thead>
   <tbody>
-    @for (contact of sortedContacts; track $index) {
+    @for (contact of displayedContacts; track $index) {
       <tr>
         <td>{{ contact.name }}</td>
         <td>{{ contact.dateOfBirth | date }}</td>
@@ -30,5 +39,3 @@
       No contacts available
   </div>
 }
-
-
