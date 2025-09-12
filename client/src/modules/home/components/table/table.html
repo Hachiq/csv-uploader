@@ -24,11 +24,50 @@
       @if (editingContactId === contact.id) {
         <ng-container>
           <!-- Edit Mode -->
-          <td><input [(ngModel)]="editedContact!.name" /></td>
-          <td><input type="date" [(ngModel)]="editedContact!.dateOfBirth" /></td>
-          <td><input type="checkbox" [(ngModel)]="editedContact!.isMarried" /></td>
-          <td><input [(ngModel)]="editedContact!.phone" /></td>
-          <td><input type="number" [(ngModel)]="editedContact!.salary" /></td>
+          <td><input [(ngModel)]="editedContact!.name"
+                     required
+                     maxlength="100"
+                     #nameCtrl="ngModel" />
+            @if (nameCtrl.invalid && nameCtrl.touched) {
+              <div class="error">
+                Name is required.
+              </div>
+            }
+          </td>
+          <td><input type="date"
+                     [(ngModel)]="editedContact!.dateOfBirth"
+                     required
+                     #dobCtrl="ngModel" />
+            @if (dobCtrl.invalid && dobCtrl.touched) {
+              <div class="error">
+                Date of birth is required.
+              </div>
+            }
+          </td>
+          <td><input type="checkbox"
+                     [(ngModel)]="editedContact!.isMarried" />
+          </td>
+          <td><input [(ngModel)]="editedContact!.phone"
+                     required
+                     pattern="^[0-9+\- ]+$"
+                     #phoneCtrl="ngModel" />
+            @if (phoneCtrl.invalid && phoneCtrl.touched) {
+              <div class="error">
+                Phone number is invalid.
+              </div>
+            }
+          </td>
+          <td><input type="number"
+                     [(ngModel)]="editedContact!.salary"
+                     min="0"
+                     max="1000000000"
+                     #salaryCtrl="ngModel" />
+            @if (salaryCtrl.invalid && salaryCtrl.touched) {
+              <div class="error">
+                Salary must be between 0 and 1,000,000,000.
+              </div>
+            }
+          </td>
           <td class="button-group">
             <button class="save-button" (click)="saveEdit()">Save</button>
             <button class="cancel-button" (click)="resetEditingContact()">Cancel</button>

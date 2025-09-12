@@ -34,6 +34,15 @@ td {
   color: var(--secondary);
 }
 
+input.ng-invalid.ng-touched {
+  border: 1px solid var(--danger);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 12px;
+}
+
 button {
   width: 100%;
   color: var(--secondary);
