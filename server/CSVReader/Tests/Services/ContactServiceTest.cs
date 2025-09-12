@@ -31,7 +31,8 @@ namespace Services.Tests
 
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(csvContent));
             using var context = GetInMemoryDbContext();
-            var service = new ContactService(context);
+            var validator = new ContactValidator();
+            var service = new ContactService(context, validator);
 
             // Act
             await service.UploadContactsAsync(stream);
@@ -48,7 +49,8 @@ namespace Services.Tests
         public async Task UpdateContactAsync_Should_Update_Existing_Contact()
         {
             using var context = GetInMemoryDbContext();
-            var service = new ContactService(context);
+            var validator = new ContactValidator();
+            var service = new ContactService(context, validator);
 
             var contact = new Contact
             {
@@ -86,7 +88,8 @@ namespace Services.Tests
         public async Task DeleteContactAsync_Should_Remove_Contact()
         {
             using var context = GetInMemoryDbContext();
-            var service = new ContactService(context);
+            var validator = new ContactValidator();
+            var service = new ContactService(context, validator);
 
             var contact = new Contact
             {
