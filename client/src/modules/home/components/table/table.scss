@@ -18,6 +18,10 @@ th {
   color: var(--primary);
 }
 
+th:hover {
+  cursor: pointer;
+}
+
 tbody tr:nth-child(even) {
   background-color: var(--quaternary);
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-upload-button',
@@ -7,6 +7,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrl: './upload-button.scss'
 })
 export class UploadButton {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   selectedFile: File | null = null;
 
   @Output() fileUploaded = new EventEmitter<File>();
@@ -25,6 +26,13 @@ export class UploadButton {
     }
 
     this.fileUploaded.emit(this.selectedFile);
+    this.resetFileInput();
+  }
+
+  resetFileInput() {
     this.selectedFile = null;
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 }

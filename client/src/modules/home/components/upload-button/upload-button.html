@@ -1,5 +1,5 @@
 <div class="upload-container">
-  <input type="file" accept=".csv" (change)="onFileSelected($event)" />
+  <input #fileInput type="file" accept=".csv" (change)="onFileSelected($event)" />
 
   <button 
     (click)="onUpload()" 
