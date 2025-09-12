@@ -7,7 +7,7 @@ using System.Globalization;
 
 namespace Services.Implementations;
 
-public class ContactService(AppDbContext _context) : IContactService
+public class ContactService(AppDbContext _context, IContactValidator _validator) : IContactService
 {
     public async Task UploadContactsAsync(Stream csvStream)
     {
@@ -34,7 +34,8 @@ public class ContactService(AppDbContext _context) : IContactService
     }
     public async Task UpdateContactAsync(Guid id, ContactDto dto)
     {
-        var contact = _context.Contacts.Find(id) ?? throw new KeyNotFoundException("Contact not found");
+        var contact = await _context.Contacts.FindAsync(id) ?? throw new KeyNotFoundException("Contact not found");
+        _validator.Validate(dto);
 
         contact.Name = dto.Name;
         contact.DateOfBirth = dto.DateOfBirth;
@@ -42,12 +43,11 @@ public class ContactService(AppDbContext _context) : IContactService
         contact.Phone = dto.Phone;
         contact.Salary = dto.Salary;
 
-        _context.Contacts.Update(contact);
         await _context.SaveChangesAsync();
     }
     public async Task DeleteContactAsync(Guid id)
     {
-        var contact = _context.Contacts.Find(id) ?? throw new KeyNotFoundException("Contact not found");
+        var contact = await _context.Contacts.FindAsync(id) ?? throw new KeyNotFoundException("Contact not found");
         _context.Contacts.Remove(contact);
         await _context.SaveChangesAsync();
     }

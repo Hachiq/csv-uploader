@@ -1,4 +1,5 @@
 ﻿using Core.DTOs;
+using Core.Exceptions;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,8 @@ namespace Web.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> UploadCsv(IFormFile file)
         {
+            // TODO: validate file type and size
+            // TODO: validate data inside the file
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 
@@ -24,23 +27,53 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var response = await _contactService.GetAllContactsAsync(cancellationToken);
-            return Ok(response);
+            try
+            {
+                var response = await _contactService.GetAllContactsAsync(cancellationToken);
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
+            
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] ContactDto dto)
         {
-            // TODO: return updated entity
-            await _contactService.UpdateContactAsync(id, dto);
-            return Ok();
+            try
+            {
+                // TODO: return updated entity
+                await _contactService.UpdateContactAsync(id, dto);
+                return Ok();
+            }
+            catch (Exception ex) when (ex is KeyNotFoundException || ex is DataInvalidException)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _contactService.DeleteContactAsync(id);
-            return Ok();
+            try
+            {
+                await _contactService.DeleteContactAsync(id);
+                return Ok();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
     }
 }
