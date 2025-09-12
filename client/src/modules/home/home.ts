@@ -32,4 +32,8 @@ export class Home {
   deleteContact(id: string) {
     this.contactService.delete(id).subscribe(() => this.getContacts());
   }
+
+  updateContact(event: { id: string, contact: Partial<Contact> }) {
+    this.contactService.update(event.id, event.contact).subscribe(() => this.getContacts());
+  }
 }

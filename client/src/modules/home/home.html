@@ -1,4 +1,8 @@
 <div class="container">
-    <app-upload-button (fileUploaded)="onFileUploaded($event)"></app-upload-button>
-    <app-table [contacts]="contacts" (onContactDelete)="deleteContact($event)"></app-table>
+    <app-upload-button (fileUploaded)="onFileUploaded($event)">
+    </app-upload-button>
+    <app-table [contacts]="contacts" 
+               (onContactDelete)="deleteContact($event)"
+               (onContactUpdate)="updateContact($event)">
+    </app-table>
 </div>

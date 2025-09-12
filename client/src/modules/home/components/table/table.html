@@ -16,20 +16,49 @@
       <th title="Sort by phone" (click)="sortBy('phone')">Phone</th>
       <th title="Sort by salary" (click)="sortBy('salary')">Salary</th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     @for (contact of displayedContacts; track $index) {
       <tr>
+      @if (editingContactId === contact.id) {
+        <ng-container>
+          <!-- Edit Mode -->
+          <td><input [(ngModel)]="editedContact!.name" /></td>
+          <td><input type="date" [(ngModel)]="editedContact!.dateOfBirth" /></td>
+          <td><input type="checkbox" [(ngModel)]="editedContact!.isMarried" /></td>
+          <td><input [(ngModel)]="editedContact!.phone" /></td>
+          <td><input type="number" [(ngModel)]="editedContact!.salary" /></td>
+          <td class="button-group">
+            <button class="save-button" (click)="saveEdit()">Save</button>
+            <button class="cancel-button" (click)="resetEditingContact()">Cancel</button>
+          </td>
+          <td>
+            <button title="Delete contact" class="delete-button" (click)="deleteContact(contact.id)">Delete</button>
+          </td>
+        </ng-container>
+      }
+      @else {
+        <ng-container *ngTemplateOutlet="viewMode"></ng-container>
+      }
+      
+
+      <ng-template #viewMode>
+        <!-- View Mode -->
         <td>{{ contact.name }}</td>
         <td>{{ contact.dateOfBirth | date }}</td>
         <td>{{ contact.isMarried ? 'Yes' : 'No' }}</td>
         <td>{{ contact.phone }}</td>
-        <td>{{ contact.salary | currency }}</td>
+        <td>{{ contact.salary | number }}</td>
         <td>
-          <button (click)="deleteContact(contact.id)">Delete</button>
+          <button title="Edit contact" class="edit-button" (click)="startEdit(contact)">Edit</button>
         </td>
-      </tr>
+        <td>
+          <button title="Delete contact" class="delete-button" (click)="deleteContact(contact.id)">Delete</button>
+        </td>
+      </ng-template>
+    </tr>
     }
   </tbody>
 </table>

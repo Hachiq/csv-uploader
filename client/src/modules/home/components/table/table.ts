@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../../../../core/interfaces/contact';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UpdateContact } from '../../../../core/interfaces/update-contact';
 
 @Component({
   selector: 'app-table',
@@ -17,10 +18,31 @@ export class Table {
   sortColumn?: keyof Contact;
   sortDirection: 'asc' | 'desc' = 'asc';
 
+  editingContactId: string | null = null;
+  editedContact: Contact | null = null;
+
   @Output() onContactDelete = new EventEmitter<string>();
+  @Output() onContactUpdate = new EventEmitter<{ id: string, contact: UpdateContact }>();
 
   ngOnChanges() {
     this.applyFiltersAndSorting();
+  }
+
+  startEdit(contact: Contact) {
+    this.editingContactId = contact.id;
+    this.editedContact = { ...contact };
+  }
+
+  resetEditingContact() {
+    this.editingContactId = null;
+    this.editedContact = null;
+  }
+
+  saveEdit() {
+    if (!this.editedContact) return;
+
+    this.onContactUpdate.emit({ id: this.editedContact.id, contact: this.editedContact });
+    this.resetEditingContact();
   }
 
   onSearchChange() {
