@@ -13,15 +13,22 @@ namespace Web.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> UploadCsv(IFormFile file)
         {
-            // TODO: validate file type and size
-            // TODO: validate data inside the file
+            // TODO: catch exceptions properly
+
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 
-            using var stream = file.OpenReadStream();
-            await _contactService.UploadContactsAsync(stream);
+            try
+            {
+                using var stream = file.OpenReadStream();
+                await _contactService.UploadContactsAsync(stream);
 
-            return Ok(new { message = "Contacts uploaded successfully." });
+                return Ok(new { message = "Contacts uploaded successfully." });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An unexpected error occurred.");
+            }
         }
 
         [HttpGet]

@@ -9,6 +9,8 @@ namespace Services.Implementations;
 
 public class ContactService(AppDbContext _context, IContactValidator _validator) : IContactService
 {
+    // TODO: validate file type and size
+    // TODO: validate data inside the file
     public async Task UploadContactsAsync(Stream csvStream)
     {
         using var reader = new StreamReader(csvStream);

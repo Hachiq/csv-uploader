@@ -21,6 +21,7 @@ export class Home {
     this.getContacts();
   }
 
+  // TODO: use the declarative approach with async pipe
   private getContacts() {
     this.contactService.getAll().subscribe(c => this.contacts = c);
   }
